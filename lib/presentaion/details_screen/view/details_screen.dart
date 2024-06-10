@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:provider/provider.dart';
+import 'package:shpoing_cart/core/color_constant/color_constant.dart';
 import 'package:shpoing_cart/presentaion/cart_screen/view/cart_screen.dart';
+import 'package:shpoing_cart/presentaion/home_screen/controller/home_screen_controller.dart';
 
 class Details_screen extends StatefulWidget {
   const Details_screen(
@@ -23,23 +27,38 @@ class Details_screen extends StatefulWidget {
 }
 
 class _Details_screenState extends State<Details_screen> {
+  //var mybox = Hive.box("testBox");
   @override
   Widget build(BuildContext context) {
+    var cart = Provider.of<HomeController>(context);
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          HomeController().adddata(
+              title: widget.title,
+              image: widget.image,
+              description: widget.image,
+              price: widget.price,
+              rating: widget.rating);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(" Item Added To Cart"),
+              backgroundColor: ColorConstant.snackbar,
+              duration: Duration(seconds: 1),
+            ),
+          );
+        },
+        child: Icon(Icons.add),
+      ),
       appBar: AppBar(
         title: Text("DETAILS"),
         centerTitle: true,
         actions: [
-          ElevatedButton(
+          IconButton(
             onPressed: () => Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => CartScreen(),
             )),
-            child: Text(
-              "Add To Cart",
-              style: TextStyle(color: Colors.white),
-            ),
-            style: ButtonStyle(
-                backgroundColor: WidgetStatePropertyAll(Colors.black)),
+            icon: Icon(Icons.shopping_cart),
           ),
         ],
       ),
@@ -58,7 +77,7 @@ class _Details_screenState extends State<Details_screen> {
                     child: Text(
                       widget.rating,
                       style: TextStyle(
-                          color: Colors.green,
+                          color: ColorConstant.green,
                           fontWeight: FontWeight.bold,
                           fontSize: 20),
                     ),
@@ -79,7 +98,7 @@ class _Details_screenState extends State<Details_screen> {
                 "\$${widget.price} /Price lncl. all Taxes",
                 style: TextStyle(
                     fontSize: 25,
-                    color: Colors.green,
+                    color: ColorConstant.green,
                     fontWeight: FontWeight.bold),
               ),
             ),
@@ -88,7 +107,7 @@ class _Details_screenState extends State<Details_screen> {
               child: Text(
                 "\Items : ${widget.count} \left",
                 style: TextStyle(
-                    color: Colors.red,
+                    color: ColorConstant.red,
                     fontSize: 18,
                     fontWeight: FontWeight.bold),
               ),
